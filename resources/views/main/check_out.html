@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Spree</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<style media="screen">
+		.carousel-item,
+		.container_link img,
+		.col-sm-12 img {
+			height: unset !important;
+		}
+
+		article .row .col-lg-3 img {
+			height: 193px !important;
+		}
+
+		html,
+		body {
+			height: 100%;
+		}
+
+		.global-container {
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			/* background-color: #f5f5f5; */
+		}
+
+		form {
+			padding-top: 10px;
+			font-size: 14px;
+			margin-top: 30px;
+		}
+
+		.card-title {
+			font-weight: 300;
+		}
+
+		.btn {
+			font-size: 14px;
+			margin-top: 20px;
+		}
+
+
+		.login-form {
+			width: 400px;
+			margin: 20px;
+		}
+
+		.sign-up {
+			text-align: center;
+			padding: 20px 0 0;
+		}
+
+		.alert {
+			margin-bottom: -30px;
+			font-size: 13px;
+			margin-top: 20px;
+		}
+
+		.form-control {
+			padding: 8px 16px !important;
+		}
+
+		.btn-primary {
+			border-radius: 50px;
+
+		}
+
+		.btn-create {
+			background-color: transparent;
+			color: black;
+			border: 1px solid black;
+			border-radius: 50px;
+		}
+
+		.card {
+			border: none;
+		}
+
+		*:focus {
+			outline: none;
+		}
+
+		input:focus {
+			outline: none;
+		}
+
+		.check_out_btn {
+			color: #fff;
+			background-color: #0069d9;
+			border-color: #0062cc;
+			width: 100%;
+			padding: 8px;
+			border: none;
+		}
+
+		.form-group {
+			margin-top: 6px;
+		}
+
+		.num_1 {
+			border-radius: 50px;
+			color: black;
+			padding: 1px 8px;
+			border: 1px solid black;
+			margin-right: 10px;
+
+		}
+
+		.card-header {
+			background-color: transparent;
+
+		}
+
+		a {
+			color: black;
+
+		}
+
+		.delivery:after {
+			content: "";
+			position: absolute;
+			top: 111px;
+			left: 101px;
+			z-index: 999999;
+			border-top: 6px solid #333;
+			border-right: 6px solid transparent;
+			border-bottom: 6px solid transparent;
+			border-left: 6px solid transparent;
+		}
+
+		.delivery {
+			border: 1px solid black;
+			padding: 8px;
+			width: 180px;
+			text-align: center;
+			margin-right: 8px;
+		}
+
+		.pickup_free {
+			border: 1px solid #ccc;
+			padding: 8px;
+			width: 180px;
+			text-align: center;
+		}
+
+		.btn_continue {
+			color: #fff;
+			background-color: #0069d9;
+			border-color: #0062cc;
+			border-radius: 50px;
+			padding: 6px 35px;
+			margin-right: 80px;
+		}
+
+		.boder_div {
+			background: white;
+			box-shadow: 0px 2px 6px lightgrey;
+			padding: 10px;
+			max-width: 250px;
+			border-radius: 5px;
+			max-height: 330px;
+		}
+
+		.card-link {
+			font-weight: bold;
+		}
+
+		input {
+			padding: 0px 20px;
+		}
+
+		label {
+			margin-bottom: 3px;
+			margin-top: 10px;
+			font-weight: 600;
+		}
+
+		.form .col-sm-6,
+		.form .col-sm-4 {
+			padding: 0px !important;
+		}
+
+		.heading h2 {
+			font-size: 30px;
+			font-weight: 700;
+			margin: 40px 0px;
+			text-align: center;
+			margin-top: 100px;
+		}
+
+		.col-sm-12 img {
+			height: unset;
+		}
+	</style>
+
+</head>
+
+<body>
+	<!-- .navbar -->
+	<section class="navigation">
+		<div class="nav-container">
+			<div class="brand">
+				<a href="#!" style="text-transform: capitalize;">Spree</a>
+			</div>
+			<nav>
+				<div class="nav-mobile"><a id="nav-toggle" href="#!"><span></span></a></div>
+				<ul class="nav-list">
+					<li class="nav-center">
+						<a href="#!">fashion</a>
+					</li>
+					<li class="nav-center">
+						<a href="#!">Health & beauty</a>
+					</li>
+					<li class="nav-center">
+						<a href="#!">Electronics</a>
+					</li>
+					<li class="nav-center" id="navLast">
+						<a href="#!">Groceries</a>
+					</li>
+					<li>
+							<div class="">
+								<div class="form-group has-search">
+									<input type="text" class="form-control" placeholder="Search">
+									<span class="fa fa-search form-control-feedback"></span>
+
+								</div>
+							</div>
+					</li>
+
+					<li class="border_ccc icons">
+
+						<a href="" style="text-transform: capitalize;">
+							Account
+							<span>
+								<img src="./icons/account.svg" alt="account" class="account">
+							</span>
+						</a>
+					</li>
+					<li class="icons">
+						<a href="" style="text-transform: capitalize;">
+							Cart
+							<span>
+								<img src="./icons/cart.svg" alt="">
+							</span>
+						</a>
+					</li>
+				</ul>
+			</nav>
+
+		</div>
+	</section>
+	<article>
+		<div class="row check_out">
+			<div class="col-lg-8 col-sm-8 col-md-8">
+
+				<div class="container">
+					<div id="accordion">
+						<div class="card">
+							<div class="card-header">
+								<a class="card-link" data-toggle="collapse" href="#collapseOne" class="sub-head">
+									<span class="num_1">1</span> Delivery and pickup options
+								</a>
+							</div>
+							<div id="collapseOne" class="collapse show" data-parent="#accordion">
+								<div class="card-body">
+									<div class="d-flex">
+										<div class="delivery">
+											Delivery
+										</div>
+										<div class="pickup_free">
+											<span style="color: orange;">Pickup</span> Free
+										</div>
+									</div>
+									<div class="d-flex" style="align-items: center;     margin-top: 36px;">
+										<div class="" style="margin-right: 6px;">
+											<img width="50px"
+												src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKnSk0n05uOfS0HOuZXSCOV5qGoitJ_g4Eww&usqp=CAU"
+												alt="">
+										</div>
+										<div class="" style="margin-right: 6px;">
+											<b>Arrives by</b>
+										</div>
+										<div class="" style="border: 1px solid #ccc;
+						border-radius: 5px;
+						padding: 6px 30px;
+						width: 65%;">
+											<div class="d-flex" style="justify-content:space-between;">
+												<div class="">
+													<input type="radio" name="" value="" checked>
+													Tue, Dec 1
+												</div>
+												<div class="">
+													<span> <b>Free</b></span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="mr-5" style="float: right;">
+										<button type="button" name="button"
+											class="btn btn_continue">Continue</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card">
+							<div class="card-header">
+								<a class="collapsed card-link lite" data-toggle="collapse" href="#collapseTwo">
+									<span class="num_1">2</span> Confirm delivery address
+								</a>
+							</div>
+							<div id="collapseTwo" class="collapse" data-parent="#accordion">
+								<div class="card-body">
+									<div class="">
+
+										<div class="row form">
+											<div class="col-lg-12 col-sm-12 col-md-12">
+												<div class="">
+													<div class="sub-head">
+														<h4>
+															Billing address
+														</h4>
+													</div>
+													<div class="row">
+														<div class="col-sm-6">
+															<div class="mr-2">
+																<div class="form-group">
+																	<label for="exampleInputEmail1">First
+																		Name</label>
+																	<input type="text" placeholder="John"
+																		class="form-control form-control-sm" id=""
+																		aria-describedby="emailHelp">
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-6">
+															<div class="ml-2">
+																<div class="form-group">
+																	<label for="exampleInputEmail1">Last
+																		Name</label>
+																	<input type="text" placeholder="Smith"
+																		class="form-control form-control-sm" id=""
+																		aria-describedby="emailHelp">
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="">
+														<div class="form-group">
+															<label for="exampleInputEmail1">Email address</label>
+															<input type="email" placeholder="abc@gmail.com"
+																class="form-control form-control-sm" id=""
+																aria-describedby="emailHelp">
+														</div>
+													</div>
+													<div class="">
+														<div class="form-group">
+															<label for="exampleInputEmail1"> Address</label>
+															<input type="email" placeholder="123 Main St"
+																class="form-control form-control-sm" id=""
+																aria-describedby="emailHelp">
+														</div>
+													</div>
+													<div class="">
+														<div class="form-group">
+															<label for="exampleInputEmail1">Alternate
+																Address</label>
+															<input type="email" placeholder="Enter your Address"
+																class="form-control form-control-sm" id=""
+																aria-describedby="emailHelp">
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-sm-4">
+															<div class="mr-2">
+																<div class="form-group">
+																	<label for="exampleInputEmail1">Country</label>
+																	<input type="email" placeholder="Choose.."
+																		class="form-control form-control-sm" id=""
+																		aria-describedby="emailHelp">
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-4">
+															<div class="">
+																<div class="form-group">
+																	<label for="exampleInputEmail1">State</label>
+																	<input type="email" placeholder="Choose.."
+																		class="form-control form-control-sm" id=""
+																		aria-describedby="emailHelp">
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-4">
+															<div class="ml-2">
+																<div class="form-group">
+																	<label for="exampleInputEmail1">Zip</label>
+																	<input type="email" placeholder="Choose.."
+																		class="form-control form-control-sm" id=""
+																		aria-describedby="emailHelp">
+																</div>
+															</div>
+														</div>
+													</div>
+													<hr>
+													<div class="">
+														<input type="checkbox" name="" value=""> Shipping address is
+														the same
+														as my billing address
+													</div>
+													<div class="">
+														<input type="checkbox" name="" value=""> Save this
+														information for next time
+
+													</div>
+
+													<hr>
+													<div class="">
+														<button type="button" name="button"
+															class="check_out_btn">Continue to Payment</button>
+													</div>
+												</div>
+											</div>
+											<!-- <div class="col-lg-4 col-sm-4 col-md-4">
+												
+											</div> -->
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card">
+							<div class="card-header">
+								<a class="collapsed card-link lite" data-toggle="collapse" href="#collapseThree">
+									<span class="num_1">3</span> Enter payment method
+								</a>
+							</div>
+							<div id="collapseThree" class="collapse" data-parent="#accordion">
+								<div class="card-body">
+									<div class="">
+										<h5>Payment</h5>
+										<input type="radio" name="" value=""> Credit card <br>
+										<input type="radio" name="" value=""> Debit card <br>
+										<input type="radio" name="" value=""> Default radio
+									</div>
+									<div class="row">
+										<div class="col-sm-6">
+											<div class="mr-2">
+												<div class="form-group">
+													<label for="exampleInputEmail1"> Name on card</label>
+													<input type="email" placeholder=""
+														class="form-control form-control-sm" id=""
+														aria-describedby="emailHelp">
+													<span>Full name as displayedon card</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="ml-2">
+												<div class="form-group">
+													<label for="exampleInputEmail1">Credit card number</label>
+													<input type="email" placeholder=""
+														class="form-control form-control-sm" id=""
+														aria-describedby="emailHelp">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-6">
+											<div class="mr-2">
+												<div class="form-group">
+													<label for="exampleInputEmail1"> Expiration</label>
+													<input type="email" placeholder=""
+														class="form-control form-control-sm" id=""
+														aria-describedby="emailHelp">
+													<!-- <span>Full name as displayedon card</span> -->
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="ml-2">
+												<div class="form-group">
+													<label for="exampleInputEmail1">CVV</label>
+													<input type="email" placeholder=""
+														class="form-control form-control-sm" id=""
+														aria-describedby="emailHelp">
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-12 mt-4">
+											<button type="button" name="button" class="check_out_btn">Confirm
+												Order</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="col-lg-4 col-sm-4 col-md-4">
+				<!-- <div class="">
+					<h6>Your cart</h6>
+					<div class="" style="    border: 1px solid #ccc;">
+						<div class="d-flex"
+							style="    border-bottom: 1px solid #ccc;padding: 8px 19px; justify-content: space-between;">
+							<div class="">
+								<span> <b>Product name</b> </span> <br>
+								<span>Brief description</span>
+							</div>
+							<div class="">
+								$12
+							</div>
+						</div>
+						<div class="d-flex"
+							style="    border-bottom: 1px solid #ccc;padding: 8px 19px; justify-content: space-between;">
+							<div class="">
+								<span> <b>Second Product</b> </span> <br>
+								<span>Brief description</span>
+							</div>
+							<div class="">
+								$12
+							</div>
+						</div>
+						<div class="d-flex"
+							style="    border-bottom: 1px solid #ccc;padding: 8px 19px; justify-content: space-between;">
+							<div class="">
+								<span> <b>Third item</b> </span> <br>
+								<span>Brief description</span>
+							</div>
+							<div class="">
+								$12
+							</div>
+						</div>
+						<div class="d-flex"
+							style="color: #11c60f;  border-bottom: 1px solid #ccc;padding: 8px 19px; justify-content: space-between;">
+							<div class="">
+								<span> <b>Promo code</b> </span> <br>
+								<span>SPREE</span>
+							</div>
+							<div class="">
+								$12
+							</div>
+						</div>
+						<div class="d-flex"
+							style="    border-bottom: 1px solid #ccc;padding: 8px 19px; justify-content: space-between;">
+							<div class="">
+								<span> <b>Total (USD)</b> </span> <br>
+								<span>SPREE</span>
+							</div>
+							<div class="">
+								<b>$12</b>
+							</div>
+						</div>
+					</div>
+					<div class="d-flex" style="    border: 1px solid #ccc;    padding: 8px;
+					margin-top: 13px;">
+						<input type="text" style="width: 100%" placeholder="Promo code" name="" value="">
+						<button type="button" style="    background: gray; border: none;
+							color: white;
+							padding: 7px;" name="button" class="redeem">Redeem</button>
+					</div>
+
+				</div> -->
+
+				<div class="boder_div">
+
+					<div class="d-flex" style="justify-content: space-between;">
+						<div class="">
+							<p class="text-bold">
+								Subtotal (1 item)
+							</p>
+
+						</div>
+						<div class="">
+							<p class="text-bold">
+
+								$59.00
+							</p>
+						</div>
+					</div>
+					<div class="d-flex" style="justify-content: space-between;">
+						<div class="">
+							<p class="text-bold">
+								Delivery
+							</p>
+
+						</div>
+						<div class="">
+							<p class="text-bold">
+								Free
+							</p>
+						</div>
+					</div>
+					<div class="d-flex" style="justify-content: space-between;">
+						<div class="">
+							<p class="text-bold" style="margin-bottom: 0px;">
+								Taxes & fees
+							</p>
+						</div>
+						<div class="">
+							<p class="text-bold">
+								--
+							</p>
+
+						</div>
+
+					</div>
+					<span class="text-bold" style="font-size: 12px;">(calculated onces address is confirmed)</span>
+
+					<hr>
+					<div class="d-flex" style="justify-content: space-between;">
+						<div class="">
+							<p class="extra-bold">
+								Est. Total
+							</p>
+						</div>
+						<div class="">
+							<p class="extra-bold">
+								59:00
+							</p>
+						</div>
+					</div>
+
+					<div id="accordion2">
+						<div class="card">
+							<div class="card-header">
+								<a class="text-bold" data-toggle="collapse" href="#collapseItem">
+									item details +
+								</a>
+							</div>
+							<div id="collapseItem" class="collapse" data-parent="#accordion2">
+								<div class="card-body">
+									<div class="" style="justify-content: space-between;">
+
+										<div class="itemDetails d-flex pt-2">
+											<div class="itemImg">
+												<img src="./images/joy.png" alt="cart products">
+											</div>
+											<div class="itemDetails ml-2">
+												<p class="itemName">
+													Nintendo Switch Console with Gray Joy-Con
+												</p>
+												<div class="qtyPrice d-flex space-between">
+													<p class="text-bold">
+														Qty : <span>1</span>
+													</p>
+													<p class="text-bold">
+														$59.00
+													</p>
+												</div>
+
+												<hr style="margin: 5px;" />
+
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="card">
+							<div class="card-header">
+								<a class="text-bold" data-toggle="collapse" href="#collapseCode">
+									Apply Promo Code +
+								</a>
+							</div>
+							<div id="collapseCode" class="collapse" data-parent="#accordion2">
+								<div class="card-body">
+									<div class="d-flex" style="padding: 8px 3px;">
+										<input type="text" style="width: 100%" placeholder="Promo code" name=""
+											value="">
+										<button type="button" style="    background: gray; border: none;
+							color: white;
+							padding: 7px;" name="button" class="redeem">Redeem</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="footer">
+			<div class="row" style="margin-left: -2px;">
+				<div class="col-lg-3 col-md-6 col-sm-12 ">
+					<div>
+						<h6>Get to Know Us</h6>
+						<ul>
+							<li>
+								<a href="./about.html">About Us</a>
+							</li>
+							<li>
+								<a href="./career.html">Career</a>
+							</li>
+							<li>
+								<a href="./blog.html">Blog</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-lg-3 ">
+					<div>
+						<h6>Spree Business</h6>
+						<ul>
+							<li>
+								<a href="./partner.html">Sell on Spree</a>
+							</li>
+							<li>
+								<a href="./vendor/vendor.html">Advertise With Us</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-lg-3 ">
+					<div>
+						<h6>Customer Service</h6>
+						<ul>
+							<li>
+								<a href="./contact.html">Contact Us </a>
+							</li>
+							<li>
+								<a href="./contact.html">FAQ</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-lg-3  ">
+					<h6>Social</h6>
+					<div class="d-flex">
+						<div style="width: 24px;">
+							<i class="fa fa-instagram" aria-hidden="true"></i>
+
+						</div>
+						<div style="width: 24px;" class="ml-3">
+							<i class="fa fa-twitter" aria-hidden="true"></i>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<div class="copyRight">
+			<p>
+				Copyright © 2020 Spree. All Rights Reserved.
+			</p>
+		</div>
+	</article>
+
+	<!-- /.navbar -->
+</body>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/popper.min"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript">
+	(function ($) { // Begin jQuery
+		$(function () { // DOM ready
+			// If a link has a dropdown, add sub menu toggle.
+			$('nav ul li a:not(:only-child)').click(function (e) {
+				$(this).siblings('.nav-dropdown').toggle();
+				// Close one dropdown when selecting another
+				$('.nav-dropdown').not($(this).siblings()).hide();
+				e.stopPropagation();
+			});
+			// Clicking away from dropdown will remove the dropdown class
+			$('html').click(function () {
+				$('.nav-dropdown').hide();
+			});
+			// Toggle open and close nav styles on click
+			$('#nav-toggle').click(function () {
+				$('nav ul').slideToggle();
+			});
+			// Hamburger to X toggle
+			$('#nav-toggle').on('click', function () {
+				this.classList.toggle('active');
+			});
+		}); // end DOM ready
+	})(jQuery); // end jQuery
+</script>
+
+</html>

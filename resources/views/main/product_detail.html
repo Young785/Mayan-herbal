@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/product_detail.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap" rel="stylesheet">
+
+    <!-- 1. Add latest jQuery and fancybox files -->
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    <!-- font awesome -->
+    <script src="https://kit.fontawesome.com/74d240b4ae.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+
+    <!-- .navbar -->
+    <section class="navigation">
+        <div class="nav-container">
+            <div class="brand">
+                <a href="#!" style="text-transform: capitalize;">Spree</a>
+            </div>
+            <nav>
+                <div class="nav-mobile"><a id="nav-toggle" href="#!"><span></span></a></div>
+                <ul class="nav-list">
+                    <li class="nav-center">
+                        <a href="#!">fashion</a>
+                    </li>
+                    <li class="nav-center">
+                        <a href="#!">Health & beauty</a>
+                    </li>
+                    <li class="nav-center">
+                        <a href="#!">Electronics</a>
+                    </li>
+                    <li class="nav-center" id="navLast">
+                        <a href="#!">Groceries</a>
+                    </li>
+                    <li>
+                        <div class="">
+                            <div class="form-group has-search">
+                                <input type="text" class="form-control" placeholder="Search">
+                                <span class="fa fa-search form-control-feedback"></span>
+
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="border_ccc icons">
+
+                        <a href="" style="text-transform: capitalize;">
+                            Account
+                            <span>
+                                <img src="./icons/account.svg" alt="account" class="account">
+                            </span>
+                        </a>
+                    </li>
+                    <li class="icons">
+                        <a href="" style="text-transform: capitalize;">
+                            Cart
+                            <span>
+                                <img src="./icons/cart.svg" alt="">
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+    </section>
+
+    <main>
+        <!-- product details section -->
+        <section class="pro_detail">
+            <div class="top d-flex space-between">
+                <div class="d-flex top_links">
+                    <a href="">
+                        <p>
+                            Video Games /
+                        </p>
+                    </a>
+                    <a href="">
+                        <p>
+                            Nintendo Switch /
+                        </p>
+                    </a>
+                    <a href="">
+                        <p style="color: #000;">
+                            Nintendo Switch Console
+                        </p>
+                    </a>
+                </div>
+                <!-- <div class="d-flex top_icons">
+                <i class="fab fa-facebook-f"></i>
+                <i class="fab fa-pinterest-p"></i>
+                <i class="fab fa-twitter"></i>
+            </div> -->
+            </div>
+            <div class="detailRow">
+                <div class="pro_col1 d-flex">
+                    <div>
+                        <div class="sImg active">
+                            <img src="./images/nintendo.jpg" alt="">
+                        </div>
+                        <div class="sImg">
+                            <img src="./images/n2.jpg" alt="">
+                        </div>
+                        <div class="sImg">
+                            <img src="./images/n3.jpg" alt="">
+                        </div>
+                        <div class="sImg">
+                            <img src="./images/n4.jpg" alt="">
+                        </div>
+                        <div class="sImg">
+                            <img src="./images/n2.jpg" alt="">
+                        </div>
+                    </div>
+                    <div class="mainImg">
+                        <img src="./images/nintendo.jpg" alt="">
+
+                    </div>
+
+                </div>
+                <div class="pro_col2">
+                    <p class="underline">Nintendo</p>
+                    <h2 class="heading">
+                        Nintendo Switch Console with Gray Joy-Con
+                    </h2>
+                    <div>
+                        <!-- <div class="d-flex stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half"></i>
+                        <p>(4.6)</p>
+                        <p class="underline ml-2">
+                            2267 rating
+                        </p>
+                        <p class="underline ml-3">
+                            390 comments
+                        </p>
+                    </div> -->
+                        <div>
+                            <h4 class="price mt-3 mb-3">
+                                $402.16
+                            </h4>
+                        </div>
+                        <p>
+                            <b>Actual Color:</b> Gray
+                        </p>
+                        <a href="" class="under_btn">
+                            Gray
+                        </a>
+                        <div class="qtySection d-flex mt-4">
+                            <div class="qty">
+                                <label for="qty" class="text-bold">Qty:</label>
+                                <select class="sQty">
+                                    <option value="1">1</option>
+                                    <option value="1">2</option>
+                                    <option value="1">3</option>
+                                    <option value="1">4</option>
+                                    <option value="1">5</option>
+                                </select>
+                            </div>
+                            <div>
+                                <a href="" class="cart_btn">
+                                    Add to Cart
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="delivery">
+                            <div class="free d-flex">
+                                <div class="icon">
+                                    <i class="fas fa-shipping-fast"></i>
+                                </div>
+                                <div class="text ml-2">
+                                    <p>
+                                        <b>
+                                            Free Delivery
+                                        </b>
+                                    </p>
+                                    <p>
+                                        Arrived by Wednesday ,Dec 16
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="pick d-flex mt-2">
+                                <div class="icon">
+                                    <i class="fas fa-laptop-house"></i>
+                                </div>
+                                <div class="text ml-2">
+                                    <p>
+                                        Pickup Not Available
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="underline mt-3">More delivery & pickup options</p>
+                        <div class="seller">
+                            <div>
+                                <p>
+                                    <i class="fas fa-certificate"></i>
+                                    Pro seller
+                                </p>
+                            </div>
+                            <div class="d-flex">
+                                <p>
+
+                                    Sold and ship by
+                                </p>
+                                <p class="underline ml-1">
+                                    Discount tech
+                                </p>
+                                <p class="mr-3 ml-3">
+                                    |
+                                </p>
+                                <p class="underline">
+                                    Return policy
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="add d-flex">
+                            <p class="underline">
+                                <i class="fas fa-list-ul mr-2"></i>
+                                Add to list
+                            </p>
+                            <p class="underline ml-4">
+                                <i class="fas fa-gift mr-1"></i>
+                                Add to registry
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="heading mt-5 aboutItem">
+                <h2>
+                    About this item
+                </h2>
+                <p class="text-bold">
+                    <span class="aBold">We aim to show you accurate product information.</span> Manufacturers, suppliers
+                    and
+                    others provide what you see here, and we have not verified it. See our disclaimer
+                </p>
+                <span class="aBold mt-3 block">
+                    Nintendo Switch with Gray Joy-Con controllers.
+                </span>
+                <p>
+                    Nintendo Switch is Nintendos latest home video game system. In addition to providing single and
+                    multiplayer thrills at home, the Nintendo Switch system can be taken on the go so players can enjoy
+                    a
+                    full home console experience anytime, anywhere. The mobility of a handheld is now added to the power
+                    of
+                    a home gaming system, with unprecedented new play styles brought to life by the two new Joy-Con
+                    controllers.
+                </p>
+                <p>
+                    At home the system rests in the Nintendo Switch dock, which lets you play with family and friends on
+                    a
+                    TV in the comfort of your living room. By simply lifting Nintendo Switch from the dock at any time,
+                    the
+                    system instantly transitions to handheld mode, and the same great gaming experience that was being
+                    enjoyed at home now travels with you. The portability of Nintendo Switch is enhanced by its 6.2-inch
+                    screen, which displays bright, high-definition gameplay at the park, on an airplane, in a car, or at
+                    a
+                    friend?s apartment. Nintendo Switch comes with two Joy-Con controllers that can each act as a
+                    standalone
+                    controller with an analog stick, a full complement of face and shoulder buttons, built in
+                    motion-sensing
+                    technology and HD Rumble. They can be inserted into a Joy-Con grip accessory to be used like a
+                    traditional controller, held comfortably in each hand for independent left and right motion
+                    controls, or
+                    shared between two players for instant multiplayer gaming in front of the TV or out on the go.
+                </p>
+                <p class="mt-3">
+
+                    This bundle includes the Nintendo Switch console and Nintendo Switch dock in black, left and right
+                    Joy-Con controllers in a contrasting gray, and <span class="aBold">
+                        MARIO KART 8
+                    </span>
+                </p>
+                <p class="mt-3">
+
+                    Includes original Nintendo Switch model HAC-001, battery performance ranges from 2.5 - 6.5 hours.
+                    For
+                    more information, see support.nintendo.com/switch/battery
+                </p>
+                <span class="aBold block mt-3">
+                    Mario Kart 8 Deluxe
+                </span>
+                <p>
+                    Race and battle your friends in the definitive version of the Mario Kart 8 game.
+                </p>
+                <p>
+                    Hit the road with the definitive version of Mario Kart 8 and play anytime, anywhere! Race your
+                    friends
+                    or battle them in a revised battle mode on new and returning battle courses. Play locally in up to
+                    4-player multiplayer in 1080p while playing in TV Mode (additional accessories required; sold
+                    separately). Every track from the Wii U version, including DLC, makes a glorious return. Plus, the
+                    Inklings appear as all-new guest characters, along with returning favorites, such as King Boo, Dry
+                    Bones, and Bowser Jr.!
+                </p>
+                <p>
+                    Connections: Local Wireless, Wi-Fi
+                </p>
+                <span class="aBold block mt-3">
+                    SKU Details
+                </span>
+                <ul>
+                    <li>
+                        Nintendo Switch console
+                    </li>
+                    <li>
+                        Nintendo Switch dock
+                    </li>
+                    <li>
+                        Joy-Con (L) and Joy-Con (R)
+                    </li>
+                    <li>
+                        Two Joy-Con strap accessories
+                    </li>
+                    <li>
+                        One Joy-Con grip
+                    </li>
+                    <li>
+                        HDMI cable
+                    </li>
+                    <li>
+                        Nintendo Switch AC adapter
+                    </li>
+                    <li>
+                        6.2" 1280 x 720 Capacitive Touchscreen
+                    </li>
+                    <li>
+                        Weight - 8.27 lbs
+                    </li>
+                </ul>
+                <p class="mt-3">
+                    Mario Kart 8 Deluxe Full Game Download Insert
+                </p>
+            </div>
+
+            <div class="specification mt-5">
+                <div class="heading">
+                    <h2>
+                        Specification
+                    </h2>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <tr>
+                            <td>
+                                Brand
+                            </td>
+                            <td>
+                                Nintendo
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Manufacturer Part Number
+                            </td>
+                            <td>
+                                HACSKAAL1
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Assembled Product Dimensions (L x W x H)
+                            </td>
+                            <td>
+
+                                4.00 x 9.40 x 0.55 Inches
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Release Date
+                            </td>
+                            <td>
+                                11/28/2019
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+
+
+        </section>
+
+        <!-- also bought section -->
+        <div class="mt-2 mb-2">
+            <div class="">
+                <div class="d-flex space-between fs-15 mt-3" style="    margin-top: 44px !important;">
+                    <div>
+                        <h4 class="fs-15"> <b>Customer Also Considered </b> </h4>
+                    </div>
+                    <!-- <div>
+                        <a href="" style="color: black; font-weight: 600;">Shop All <i class="fa fa-chevron-right"></i>
+                        </a>
+                    </div> -->
+                </div>
+            </div>
+            <div class="row w20Row" style="margin-left: -2px;">
+                <div class="col-lg-3 w20">
+                    <div class="w20Img">
+                        <img src="./images/row1.jpg" alt="products">
+                    </div>
+                    <div class="w20Desc">
+                        <div>
+                            <span class="font-weight500">Apply iPad (Latest Model) Wifi</span>
+                        </div>
+                        <div>
+                            <h4>$300</h4>
+                            <button class="add_card">Add to cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 w20">
+                    <div class="w20Img">
+                        <img src="./images/row1.jpg" alt="products">
+                    </div>
+                    <div class="w20Desc">
+                        <div>
+                            <span class="font-weight500">Apply iPad (Latest Model) Wifi</span>
+                        </div>
+                        <div>
+                            <h4>$300</h4>
+                            <button class="add_card">Add to cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 w20">
+                    <div class="w20Img">
+                        <img src="./images/row2.jpg" alt="products">
+                    </div>
+                    <div class="w20Desc">
+                        <div>
+                            <span class="font-weight500">Smith & Cult Nailed Lacquer,Lovers,Creep</span>
+                        </div>
+                        <div>
+                            <h4>$300</h4>
+                            <button class="add_card">Add to cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 w20">
+                    <div class="w20Img">
+                        <img src="./images/row3.jpg" alt="products">
+                    </div>
+                    <div class="w20Desc">
+                        <div>
+                            <span class="font-weight500">Larabal fruit and cocunut nutball</span>
+                        </div>
+                        <div>
+                            <h4>$300</h4>
+                            <button class="add_card">Add to cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 w20">
+                    <div class="w20Img">
+                        <img src="./images/row4.jpg" alt="products">
+                    </div>
+                    <div class="w20Desc">
+                        <div>
+                            <span class="font-weight500">Umbra trag wall display large</span>
+                        </div>
+                        <div>
+                            <h4>$300</h4>
+                            <button class="add_card">Add to cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 w20">
+                    <div class="w20Img">
+                        <img src="./images/row5.jpg" alt="products">
+                    </div>
+                    <div class="w20Desc">
+                        <div>
+                            <span class="font-weight500">cotton waffle coverlet</span>
+                        </div>
+                        <div>
+                            <h4>$300</h4>
+                            <button class="add_card">Add to cart</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+    <div class="footer">
+        <div class="row" style="margin-left: -2px;">
+            <div class="col-lg-3 col-md-6 col-sm-12 ">
+                <div>
+                    <h6>Get to Know Us</h6>
+                    <ul>
+                        <li>
+                            <a href="./about.html">About Us</a>
+                        </li>
+                        <li>
+                            <a href="./career.html">Career</a>
+                        </li>
+                        <li>
+                            <a href="./blog.html">Blog</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3 ">
+                <div>
+                    <h6>Spree Business</h6>
+                    <ul>
+                        <li>
+                            <a href="./partner.html">Sell on Spree</a>
+                        </li>
+                        <li>
+                            <a href="./vendor/vendor.html">Advertise With Us</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3 ">
+                <div>
+                    <h6>Customer Service</h6>
+                    <ul>
+                        <li>
+                            <a href="./contact.html">Contact Us </a>
+                        </li>
+                        <li>
+                            <a href="./contact.html">FAQ</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3  ">
+                <h6>Social</h6>
+                <div class="d-flex">
+                    <div style="width: 24px;">
+                        <i class="fa fa-instagram" aria-hidden="true"></i>
+
+                    </div>
+                    <div style="width: 24px;" class="ml-3">
+                        <i class="fa fa-twitter" aria-hidden="true"></i>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="copyRight">
+        <p>
+            Copyright © 2020 Spree. All Rights Reserved.
+        </p>
+    </div>
+    </main>
+
+
+
+</body>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/popper.min"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    (function ($) { // Begin jQuery
+        $(function () { // DOM ready
+            // If a link has a dropdown, add sub menu toggle.
+            $('nav ul li a:not(:only-child)').click(function (e) {
+                $(this).siblings('.nav-dropdown').toggle();
+                // Close one dropdown when selecting another
+                $('.nav-dropdown').not($(this).siblings()).hide();
+                e.stopPropagation();
+            });
+            // Clicking away from dropdown will remove the dropdown class
+            $('html').click(function () {
+                $('.nav-dropdown').hide();
+            });
+            // Toggle open and close nav styles on click
+            $('#nav-toggle').click(function () {
+                $('nav ul').slideToggle();
+            });
+            // Hamburger to X toggle
+            $('#nav-toggle').on('click', function () {
+                this.classList.toggle('active');
+            });
+        }); // end DOM ready
+    })(jQuery); // end jQuery
+</script>
+
+</html>

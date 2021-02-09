@@ -1,0 +1,964 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Transaction as ModelsTransaction;
+use App\Notifications\CategoryNotification;
+use App\Notifications\VendorAcceptedNotification;
+use App\User;
+use App\Wallet;
+use App\Transaction;
+use App\Category;
+use App\Order;
+use App\Product;
+use Illuminate\Support\Str;
+use App\Train;
+use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\DB;
+
+use Illuminate\Support\Facades\Auth;
+
+class AdminController extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('auth');
+
+    }
+    public function index()
+    {
+        return view("login");
+    }
+    public function users()
+    {
+        $users = Wallet::rightjoin("users", "users.id", "=", "wallets.user_id" )->where(['user_type' => "user"])->get();
+        return view("pages/users", compact("users"));
+    }
+    public function vendor()
+    {
+        $vendor = Wallet::rightjoin("users", "users.id", "=", "wallets.user_id" )->where(['user_type' => "vendor"])->get();
+        return view("pages/vendor", compact("vendor"));
+    }
+    public function ordersPage()
+    {
+        $order_products = Product::rightjoin("orders", "orders.product_id", "=", "products.id")->join("users", "orders.user_id", "=", "users.id")->get();
+        $orders = Order::all();
+        foreach ($order_products as $pic) {
+            $pic['image_name'] = json_decode($pic['image_name'], true);
+          }
+        return view("pages.orders", compact("order_products", "orders"));
+    }
+    public function delUser($id)
+    {
+        User::where("id", $id)->delete();
+        return redirect("users")->with("msg", "The user was deleted Successfully!");
+    }
+    public function makeVendor($id)
+    {
+        $user = User::where("id", $id)->first();
+        User::where("id", $id)->update(["user_type" => "vendor"]);
+        
+        session()->put("rec_user", $user);
+
+        $user->notify(new VendorAcceptedNotification);
+
+        session()->forget("id");
+
+        session()->forget("rec_user");
+        return redirect("/vendors")->with("vendor", "You have Successfully make the user a Vendor!");
+    }
+    public function makeUser($id)
+    {
+        $user = User::where("id", $id)->first();
+
+        User::where("id", $id)->update(["user_type" => "user"]);
+
+        return redirect("/users")->with("user", "You have Successfully make the vendor a User!");
+    }
+
+    public function categories()
+    {
+        $categories = Category::all()->sortByDesc("created_at");
+        
+        return view("pages.category", compact("categories"));
+    }
+    public function addCategoryPage()
+    {
+        return view("pages.add-category");
+    }
+    public function addCategory()   
+    {
+        $data = request()->validate([
+            "category_name" => "required",
+            "category_image" => "required",
+            "category_description" => "required",
+        ]);
+        
+        $file = request()->file('category_image');
+        $extension = $file->getClientOriginalExtension();
+        $filename = time() . '.' . $extension;
+        $file->move('images/category/', $filename);
+        $id = Auth::user()->id;
+
+        $item['category_name'] = request("category_name");
+        $item['category_image'] = $filename;
+        $item['category_slug'] = Str::slug(request("category_name"));
+        $item['category_description'] = request("category_description");
+        $item['user_id'] = $id;
+
+        Category::create($item);
+        Auth::user()->notify(new CategoryNotification);
+        return redirect("/categories")->with("msg", "You have Successfully added a new Category!");
+    }
+    public function deleteCategory($id)
+    {
+        Category::where("id", $id)->delete();
+
+        return redirect("/admin/categories")->with("catDeleted", "Category Deleted Successfully!");
+    }
+    public function editCategory(Request $request, $id)
+    {
+        $data['category_name'] = request("category_name");
+        $data['category_description'] = request("category_description");
+        // dd($data);
+        if (request()->hasFile('category_image')) {
+            $file = request()->file('category_image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $file->move('images/category/', $filename);
+
+            $data['category_image'] = $filename;
+        }
+        Category::where('id', $id)->update($data);
+
+        return redirect("/admin/categories")->with("catEdited", "Category Edited Successfully!");
+    }
+
+
+    public function products()
+    {
+        $pics = Product::all();
+        foreach ($pics as $pic) {
+            $pic['image_name'] = json_decode($pic['image_name'], true);
+        // $pics[0]['image_name']; 
+        }
+
+        $products = Product::all();
+        return view("pages.products", compact("products", "pics"));
+    }
+    public function addProductsPage()
+    {
+        $getcat = Category::all();
+        return view("pages.add-product", compact("getcat"));
+    }
+    public function addProducts()
+    {
+        if (request()->hasFile("image_name")) {
+            $file = request()->file('image_name');
+            $f = [];
+            foreach ($file as $item) {
+                $extension = $item->getClientOriginalExtension();
+                $name = $item->getClientOriginalName();
+                $filename = $name.time() . '.' . $extension;
+                $f[] = $filename;
+                $item->move('images/products/', $filename);
+            }
+        }
+        
+        $data = request()->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'category_id' => 'required',
+            'price' => 'required',
+            'quantity' => 'required',
+            'image_name' => 'required',
+        ]);
+        $id = Auth::user()->id;
+        $data['user_id'] = $id;
+          
+        $data['image_name'] = json_encode($f);
+        
+        $data['product_slug'] = Str::slug(request('name'));
+        
+        Product::create($data);
+
+        return redirect("/products")->with("msg", "Product Created Successfully!");
+    }
+    public function deleteProduct($id)
+    {
+        Product::where("id", $id)->delete();
+
+        return redirect("/products")->with("prodDeleted", "Product Deleted Successfully!");
+    }
+    public function editProduct(Request $request, $id)
+    {
+        $data['name'] = request("name");
+        $data['description'] = request("description");
+        $data['price'] = request("price");
+        $data['quantity'] = request("quantity");
+       
+        Product::where('id', $id)->update($data);
+
+        return redirect("/products")->with("prodEdited", "Product Edited Successfully!");
+    }
+
+    public function pending()
+    {
+        DB::table('users')
+        ->where('activated', '=', 'no')
+        ->where('created_at', '<', DB::raw('NOW() - INTERVAL 3 DAY'))
+        ->delete();
+
+        DB::table('users')
+        ->where('activated', '=', 'pending')
+        ->where('created_at', '<', DB::raw('NOW() - INTERVAL 5 DAY'))
+        ->delete();
+
+        $data['users'] = DB::table('users')
+                ->where('activated', '=', 'no')
+                ->get();
+
+        $data['allusers'] = User::all()->count();
+
+        $data['activated'] = User::where('activated', 'yes')->count();
+
+
+        return view('pending')->with($data);
+    }
+    public function checkUser(Request $request)
+    {
+        $username = $request->input('username');
+
+        $user = DB::table('users')->where('username', $username)->first();
+
+        if(empty($user)) {
+            return response()->json(['message' => 'Not Found'], 404);
+        }
+        return response()->json($user, 200);
+
+    }
+    public function staff()
+    {
+        $users = DB::table('users')
+        ->where('role', '=', 'staff')
+        ->get();
+        return view('staff')->with(['users' => $users]);
+    }
+
+    public function makeStaff(Request $request) {
+
+        $user = DB::table('users')->where('username', $request->username)->exists();
+
+        if($user) {
+            DB::table('users')
+            ->where('username', $request->username)
+            ->update(['role' => 'staff']);
+
+            return redirect()->back();
+        }
+        return back();
+    }
+    public function fund(Request $request)
+    {
+        $user = DB::table('users')->where('username', $request->username)->first();
+
+        if($wallet = Wallet::where('user_id',  $user->id)->first()) {
+            $amount =  $wallet->amount + intval($request->amount);
+            $wallet->amount = $amount;
+            $wallet->save();
+            $type = "Funded";
+
+            ModelsTransaction::create(['user_id' => $user->id,
+            'amount' => intval($request->amount), 'type'=> $type, 'status' => 'successful']);
+
+            $request->session()->flash('success', 'You just funded ' .$request->username . '\'s Wallet' );
+
+            return back();
+        }else {
+
+        $amount =  intval($request->amount);
+        $type = "Funded";
+
+        Wallet::create(['user_id' =>  $user->id, 'amount' => $amount]);
+
+        ModelsTransaction::create(['user_id' => $user->id,
+            'amount' => $amount, 'type'=> $type, 'status' => 'successful']);
+
+        $request->session()->flash('success', 'You just funded ' .$request->username . '\'s Wallet' );
+
+        return back();
+        }
+
+        $request->session()->flash('success', 'Opps! Something went wrong!' );
+
+        return back();
+
+
+    }
+
+    public function payment()
+    {
+       $users = DB::table('transactions')
+       ->select(DB::raw('transactions.amount, transactions.id as trans_id, users.*, wallets.amount as balance, user_accounts.bank_name, user_accounts.account_name, user_accounts.account_no'))
+       ->where('status', '=', 'pending')
+       ->join('users', 'users.id', '=', 'transactions.user_id')
+       ->join('wallets', 'wallets.user_id', '=', 'transactions.user_id')
+       ->leftJoin('user_accounts', 'user_accounts.user_id', '=', 'transactions.user_id')
+        ->get();
+
+        //return response()->json($users);
+        return view('payment')->with(['users' => $users]);
+    }
+    public function transactions(){
+
+        $trans = DB::table('transactions')
+        ->select(DB::raw('transactions.*, users.name, users.username,users.level, users.phone'))
+        ->join('users', 'users.id', '=', 'transactions.user_id')->limit(1000)
+         ->get();
+
+         //return response()->json($users);
+         return view('transactions')->with(['trans' => $trans]);
+    }
+    public function paymentDone(Transaction $transaction, Request $request)
+    {
+        $transaction->status = 'successful';
+        $transaction->paid_by = Auth::id();
+        $transaction->save();
+
+        $request->session()->flash('success', 'You just confirmed that you have paid ' .$request->username );
+        return back();
+    }
+
+    //Todo Get parent
+    public function getParentId($username){
+
+        // $user = DB::table('users')->where('username', $username)->first();
+
+        $parent = DB::table('users')->where('direct_downlines', '<', 2)
+        ->where('activated', '=', 'yes')
+        ->oldest('activated_at')->first();
+
+        return $parent->id;
+
+        // if($user->direct_downlines < 2) {
+        //     return $user->id;
+        // }else {
+        //     $parent = DB::table('users')
+        //     ->select(DB::raw('users.*, users_tree.*'))
+        //     ->where('users_tree.ancestor', '=', $user->id)
+        //     ->where('users_tree.depth', '>', 0)
+        //     ->join('users_tree', 'users.id', '=', 'users_tree.descendant')
+        //     ->where('users.direct_downlines', '<', 2)
+        //     ->where('activated', '=', 'yes')
+        //     ->first();
+        // }
+
+    }
+    //Todo Get parent
+    public function getWhoToPay($id, $level){
+        if($level == 2){
+            $col = 'users.two';
+            $count = 4;
+        }else if($level == 3){
+            $col = 'users.three';
+            $count = 8;
+        }else if($level == 4){
+            $col = 'users.four';
+            $count = 16;
+        }else if($level == 5){
+            $col = 'users.five';
+            $count = 32;
+        }else if($level == 6){
+            $col = 'users.six';
+            $count = 64;
+        }
+
+            $parent = DB::table('users')
+            ->select(DB::raw('users.*, users_tree.*'))
+            ->where('users_tree.descendant', '=', $id)
+            ->where('users_tree.depth', '=', ($level-1))
+            ->join('users_tree', 'users.id', '=', 'users_tree.ancestor')
+            ->where('users.level', '>=', $level)
+            ->where($col, '<', $count)
+            ->first();
+
+
+
+            if(!$parent) {
+
+                $parent = DB::table('users')
+                ->select(DB::raw('users.*, users_tree.*'))
+                ->where('users_tree.descendant', '=', $id)
+                ->where('users_tree.depth', '>', ($level-1))
+                ->join('users_tree', 'users.id', '=', 'users_tree.ancestor')
+                ->where('users.level', '>=', $level)
+                ->where($col, '<', $count)
+                ->latest('activated_at')
+                ->first();
+
+                if(!$parent) {
+                    $parent = DB::table('users')->where('id', 1)->first();
+                    return $parent;
+
+                }
+
+                return $parent;
+
+
+            }
+
+            return $parent;
+
+
+    }
+
+    public function levelAmount($level){
+        if($level == 2){
+            return $this->level2Payment;
+        }else if($level == 3){
+            return $this->level3Payment;
+        }else if($level == 4){
+            return $this->level4Payment;
+        }else if($level == 5){
+            return $this->level5Payment;
+        }else if($level == 6){
+            return $this->level6Payment;
+        }
+    }
+
+
+    public function upgrade(Request $request) {
+
+      $wallet = Wallet::where('user_id', Auth::id())->first();
+
+        $level = Auth::user()->level + 1;
+
+
+        if($wallet->amount < $this->levelAmount($level))
+        {
+            $request->session()->flash('error', 'Insuficient funds!');
+            return redirect()->back();
+        }
+        DB::beginTransaction();
+        try{
+
+            if($level == 2) {
+
+                $parent = $this->getWhoToPay(Auth::id(), 2);
+                // return response()->json($parent);
+
+                $type = "Level 2 Benefits";
+
+                $this->pay($parent, $this->level2Payment, $type);
+
+                $type = "Level 2 Upgrade Fee";
+
+                $this->unpay(Auth::id(), $this->level2Payment, $type);
+
+                DB::table('users')->where('id', $parent->id)->increment('two');
+
+                DB::table('users')->where('id', Auth::id())->increment('level');
+
+            }
+            if($level == 3) {
+                $parent = $this->getWhoToPay(Auth::id(), 3);
+
+                $type = "Level 3 Benefits";
+
+                $this->pay($parent, $this->level3Payment, $type);
+
+                $type = "Level 3 Upgrade Fee";
+
+                $this->unpay(Auth::id(), $this->level3Payment, $type);
+
+                DB::table('users')->where('id', $parent->id)->increment('three');
+
+                DB::table('users')->where('id', Auth::id())->increment('level');
+
+            }
+            if($level == 4) {
+                $parent = $this->getWhoToPay(Auth::id(), 4);
+
+                $type = "Level 4 Benefits";
+
+                $this->pay($parent, $this->level4Payment, $type);
+
+                $type = "Level 4 Upgrade Fee";
+
+                $this->unpay(Auth::id(), $this->level4Payment, $type);
+
+                DB::table('users')->where('id', $parent->id)->increment('four');
+
+                DB::table('users')->where('id', Auth::id())->increment('level');
+
+            }
+
+            if($level == 5) {
+                $parent = $this->getWhoToPay(Auth::id(), 5);
+
+                $type = "Level 5 Benefits";
+
+                $this->pay($parent, $this->level5Payment, $type);
+
+                $type = "Level 5 Upgrade Fee";
+
+                $this->unpay(Auth::id(), $this->level5Payment, $type);
+
+                DB::table('users')->where('id', $parent->id)->increment('five');
+
+                DB::table('users')->where('id', Auth::id())->increment('level');
+
+            }
+
+            if($level == 6) {
+                $parent = $this->getWhoToPay(Auth::id(), 6);
+
+                $type = "Level 6 Benefits";
+
+                $this->pay($parent, $this->level6Payment, $type);
+
+                $type = "Level 6 Upgrade Fee";
+
+                $this->unpay(Auth::id(), $this->level6Payment, $type);
+
+                DB::table('users')->where('id', $parent->id)->increment('six');
+
+                DB::table('users')->where('id', Auth::id())->increment('level');
+
+            }
+
+        }catch (\Exception $e) {
+            // ignore everything if there is an error
+                DB::rollback();
+
+
+                $request->session()->flash('error', $e->getMessage());
+                return redirect()->back();
+
+                // something went wrong
+        }
+
+        DB::commit();
+
+
+        $request->session()->flash('success', 'upgrade level '. $level . ' was successful!');
+        return back();
+
+    }
+
+    public function upgradeOnlinePayment( $paid_amount) {
+
+
+          $level = Auth::user()->level + 1;
+
+
+          if($paid_amount < $this->levelAmount($level))
+          {
+            return response()->json([
+                'message' => 'Insuficient fund',
+                'success' => false
+            ]);
+          }
+
+          DB::beginTransaction();
+          try{
+
+              if($level == 2) {
+
+                  $parent = $this->getWhoToPay(Auth::id(), 2);
+                  // return response()->json($parent);
+
+                  $type = "Level 2 Benefits";
+
+                  $this->pay($parent, $this->level2Payment, $type);
+
+                  $type = "Level 2 Upgrade Fee (Card)";
+
+                  $this->record(Auth::id(), $this->level2Payment, $type);
+
+
+                  DB::table('users')->where('id', $parent->id)->increment('two');
+
+                  DB::table('users')->where('id', Auth::id())->increment('level');
+
+              }
+              if($level == 3) {
+                  $parent = $this->getWhoToPay(Auth::id(), 3);
+
+                  $type = "Level 3 Benefits";
+
+                  $this->pay($parent, $this->level3Payment, $type);
+
+                  $type = "Level 3 Upgrade Fee (Card)";
+
+                  $this->record(Auth::id(), $this->level3Payment, $type);
+
+                  DB::table('users')->where('id', $parent->id)->increment('three');
+
+                  DB::table('users')->where('id', Auth::id())->increment('level');
+
+              }
+              if($level == 4) {
+                  $parent = $this->getWhoToPay(Auth::id(), 4);
+
+                  $type = "Level 4 Benefits";
+
+                  $this->pay($parent, $this->level4Payment, $type);
+
+                  $type = "Level 4 Upgrade Fee (Card)";
+
+                  $this->record(Auth::id(), $this->level4Payment, $type);
+
+                  DB::table('users')->where('id', $parent->id)->increment('four');
+
+                  DB::table('users')->where('id', Auth::id())->increment('level');
+
+              }
+
+              if($level == 5) {
+                  $parent = $this->getWhoToPay(Auth::id(), 5);
+
+                  $type = "Level 5 Benefits";
+
+                  $this->pay($parent, $this->level5Payment, $type);
+
+                  $type = "Level 5 Upgrade Fee(Card)";
+
+                  $this->record(Auth::id(), $this->level5Payment, $type);
+
+
+                  DB::table('users')->where('id', $parent->id)->increment('five');
+
+                  DB::table('users')->where('id', Auth::id())->increment('level');
+
+              }
+
+              if($level == 6) {
+                  $parent = $this->getWhoToPay(Auth::id(), 6);
+
+                  $type = "Level 6 Benefits";
+
+                  $this->pay($parent, $this->level6Payment, $type);
+
+                  $type = "Level 6 Upgrade Fee (Card)";
+
+                  $this->record(Auth::id(), $this->level6Payment, $type);
+
+                  DB::table('users')->where('id', $parent->id)->increment('six');
+
+                  DB::table('users')->where('id', Auth::id())->increment('level');
+
+              }
+
+          }catch (\Exception $e) {
+              // ignore everything if there is an error
+                  DB::rollback();
+
+                  return response()->json([
+                    'message' => $e->getMessage(),
+                    'success' => false
+                ], 422);
+
+                  // something went wrong
+          }
+
+          DB::commit();
+
+
+          return response()->json([
+            'message' => 'Upgrade was successful!',
+            'success' => true
+          ], 200);
+
+      }
+
+
+    //count
+    public function countDownlines($parent_id, $level) {
+        $count = DB::table('users')
+        ->select(DB::raw('users.*, users_tree.*'))
+        ->where('users_tree.ancestor', '=', $parent_id)
+        ->where('users_tree.depth', '=', $level)
+        ->join('users_tree', 'users.id', '=', 'users_tree.descendant')
+        ->count();
+
+        return $count;
+    }
+    public function unpay($id, $amount, $type) {
+
+            $wallet = Wallet::where('user_id',  $id)->first();
+            $newAmount =  $wallet->amount - $amount;
+            $wallet->amount = $newAmount;
+            $wallet->save();
+
+            Transaction::create(['user_id' => $id,
+            'amount' => $amount, 'type'=> $type, 'status' => 'successful']);
+
+    }
+
+    public function record($id, $amount, $type) {
+
+
+        Transaction::create(['user_id' => $id,
+        'amount' => $amount, 'type'=> $type, 'status' => 'successful']);
+
+    }
+
+    public function pay($parent, $levelPayment, $type ) {
+
+        if($wallet = Wallet::where('user_id',  $parent->id)->first()) {
+            $amount =  $wallet->amount + $levelPayment;
+            $wallet->amount = $amount;
+            $wallet->save();
+
+            ModelsTransaction::create(['user_id' => $parent->id,
+            'amount' => $levelPayment, 'type'=> $type, 'status' => 'successful']);
+        }else {
+
+        $amount =  $levelPayment;
+        Wallet::create(['user_id' =>  $parent->id, 'amount' => $levelPayment]);
+
+        ModelsTransaction::create(['user_id' => $parent->id,
+            'amount' => $amount, 'type'=> $type, 'status' => 'successful']);
+        }
+    }
+    //this function also adds users to tree //old
+    public function activateUser(Request $request)
+    {
+
+        $user = DB::table('users')->where('username', $request->username)->first();
+
+        //return response()->json($user);
+
+
+        $node_id = $user->id;
+
+        DB::beginTransaction();
+
+        try {
+
+         if($node_id == 1) {
+            $parent_id = 0;
+         }else {
+            $parent = DB::table('users')->where('username', $request->by)->first();
+
+            $type = "Referral Bonus";
+
+            $this->pay($parent, $this->referralBonus, $type);
+
+            $parent_id =  $this->getParentId($parent->username);
+         }
+
+
+        $query = "
+                INSERT INTO users_tree (ancestor,descendant,depth)
+                SELECT ancestor, {$node_id}, depth+1
+                FROM users_tree
+                WHERE descendant = {$parent_id}
+                UNION ALL SELECT {$node_id}, {$node_id}, 0";
+
+        //connect parent to user in tree
+        $tree = DB::statement($query);
+
+         //update users parent id field
+         DB::table('users')
+         ->where('id', $node_id)
+         ->update(['parent_id' => $parent_id]);
+
+        DB::table('users')->where('id', $node_id)->increment('level');
+
+        //increment downline count
+        if($parent_id != 0) {
+
+            DB::table('users')->where('id', $parent_id)->increment('direct_downlines');
+
+            $realParent =  DB::table('users')->where('id', $parent_id)->first();
+
+            $type = "Level 1 Benefits";
+
+            $this->pay($realParent, $this->level1Payment, $type);
+
+        }//end if
+
+        $ghost =  DB::table('users')->where('id', 1)->first();
+
+        $type = "Registration Fee";
+
+        $this->pay($ghost, $this->adminPayment, $type);
+
+       DB::table('users')
+            ->where('id', $node_id)
+            ->update(['activated' => 'yes',
+             'activated_by' => Auth::id(), 'activated_at' => DB::raw('now()')
+            ]);
+
+        } catch (\Exception $e) {
+        // ignore everything if there is an error
+            DB::rollback();
+
+            //return response()->json($e->getMessage());
+            $request->session()->flash('error', $e->getMessage());
+            return redirect()->back();
+
+            // something went wrong
+        }
+
+        //everything is good: hit the database with changes
+        DB::commit();
+
+
+        $request->session()->flash('success', $user->username. ' activation was successful!');
+        return back();
+
+
+    }
+
+    public function onlinePaymentActivate( $paid_amount)
+    {
+
+        if($paid_amount < $this->activationFee)
+        {
+            return response()->json([
+                'message' => 'Insuficient fund',
+                'success' => false
+            ], 401);
+        }
+
+
+
+        $user = DB::table('users')->where('id', Auth::id())->first();
+
+        //return response()->json($user);
+
+
+        $node_id = $user->id;
+
+        DB::beginTransaction();
+
+        try {
+
+         if($node_id == 1) {
+            $parent_id = 0;
+         }else {
+            $parent = DB::table('users')->where('username', $user->referrer)->first();
+
+            $type = "Referral Bonus";
+
+            $this->pay($parent, $this->referralBonus, $type);
+
+            $parent_id =  $this->getParentId($parent->username);
+         }
+
+
+        $query = "
+                INSERT INTO users_tree (ancestor,descendant,depth)
+                SELECT ancestor, {$node_id}, depth+1
+                FROM users_tree
+                WHERE descendant = {$parent_id}
+                UNION ALL SELECT {$node_id}, {$node_id}, 0";
+
+        //connect parent to user in tree
+        $tree = DB::statement($query);
+
+         //update users parent id field
+         DB::table('users')
+         ->where('id', $node_id)
+         ->update(['parent_id' => $parent_id]);
+
+        DB::table('users')->where('id', $node_id)->increment('level');
+
+        //increment downline count
+        if($parent_id != 0) {
+
+            DB::table('users')->where('id', $parent_id)->increment('direct_downlines');
+
+            $realParent =  DB::table('users')->where('id', $parent_id)->first();
+
+            $type = "Level 1 Benefits";
+
+            $this->pay($realParent, $this->level1Payment, $type);
+
+        }//end if
+
+        $ghost =  DB::table('users')->where('id', 1)->first();
+
+        $type = "Registration Fee";
+
+        $this->pay($ghost, $this->adminPayment, $type);
+
+       DB::table('users')
+            ->where('id', $node_id)
+            ->update(['activated' => 'yes',
+             'activated_by' => Auth::id(), 'activated_at' => DB::raw('now()')
+            ]);
+
+        } catch (\Exception $e) {
+        // ignore everything if there is an error
+            DB::rollback();
+
+            //return response()->json($e->getMessage());
+            return response()->json([
+                'message' => $e->getMessage(),
+                'success' => false
+            ], 422);
+            // something went wrong
+        }
+
+        //everything is good: hit the database with changes
+        DB::commit();
+
+        return response()->json([
+            'message' => 'Your account activation was successful!',
+            'success' => true
+        ], 200);
+
+
+    }
+
+
+    public function verify($reference, Request $request) {
+
+        $result = array();
+        //The parameter after verify/ is the transaction reference to be verified
+        $url = 'https://api.paystack.co/transaction/verify/'. $reference;
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt(
+        $ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer '. env('PAYSTACK_SECRET_KEY')]
+        );
+        $request = curl_exec($ch);
+        if(curl_error($ch)){
+        echo 'error:' . curl_error($ch);
+        }
+        curl_close($ch);
+
+        if ($request) {
+        $result = json_decode($request, true);
+        }
+
+        if (array_key_exists('data', $result) && array_key_exists('status', $result['data']) && ($result['data']['status'] === 'success')) {
+
+            $paid_amount = $result['data']['amount'] / 100;
+            // return response()->json($result['data']);
+            if(Auth::user()->level < 1) {
+                // return response()->json($result['data']);
+               return $this->onlinePaymentActivate($paid_amount);
+            }else {
+                return $this->upgradeOnlinePayment($paid_amount);
+            }
+
+        }else{
+            return response()->json([
+                'message' => 'Transaction was unsuccessful',
+                'success' => false
+            ], 401);
+        }
+
+    }
+
+
+}
