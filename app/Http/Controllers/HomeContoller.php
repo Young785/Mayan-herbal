@@ -7,6 +7,7 @@ use App\User;
 use App\Transaction;
 use App\Train;
 use App\AppAccount;
+use App\content;
 use App\Mail\SendMail;
 use App\Models\Transaction as ModelsTransaction;
 use App\Order;
@@ -36,17 +37,27 @@ class HomeController extends Controller
 
     public function levelAmount($level){
         if($level == 1){
-            return 3000;
+            return 60000;
         }else if($level == 2){
-            return 2500;
+            return 60000;
         }else if($level == 3){
-            return 5000;
+            return 60000;
         }else if($level == 4){
-            return 16000;
+            return 60000;
         }else if($level == 5){
-            return 56000;
+            return 60000;
         }else if($level == 6){
-            return 350000;
+            return 60000;
+        }else if($level == 7){
+            return 60000;
+        }else if($level == 8){
+            return 60000;
+        }else if($level == 9){
+            return 60000;
+        }else if($level == 10){
+            return 60000;
+        }else if($level == 11){
+            return 60000;
         }
     }
 
@@ -102,7 +113,7 @@ class HomeController extends Controller
           $user->country = $request->country;
           $user->save();
           $request->session()->flash('success', "Success!! Profile updated!" );
-          return back();
+          return redirect()->back();
       }
 
 
@@ -118,6 +129,8 @@ class HomeController extends Controller
       }
       public function index()
       {
+          $contents = Content::all();
+
           $data['upline'] = User::find(Auth::user()->parent_id);
 
           $data['allusers'] = User::all()->count();
@@ -145,7 +158,7 @@ class HomeController extends Controller
           $data['pay_amount'] = $this->levelAmount($levelTo);
 
 
-          return view('pages/index')->with($data);
+          return view('pages/index', compact("contents"))->with($data);
       }
       public function notActivated()
       {
